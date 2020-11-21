@@ -26,22 +26,21 @@ const app = new Vue({
     data: {
         map: '',
     },
-    
+
     mounted: function () {
-        console.log("created");
-        this.$nextTick(function () {
-            this.init_map();
-        });
         const url = "/"
         fetch(url, {
             method: 'GET'
         })
             .then(r => r.json())
-            .then(r => alert(r))
+            .then(r => alert(JSON.stringify(r)))
             .catch(e => console.log(e))
+        this.$nextTick(function () {
+            this.init_map();
+        });
     },
     methods: {
-        init_map : function () {
+        init_map: function () {
             this.map = L.map('mapcontainer');
 
             this.map.setView([35.40, 136], 5);
