@@ -1,15 +1,15 @@
 {
-    "name": "okomari_pachho",
-    "description": "server",
-    "license": "MIT",
-    "version": "1.0.0",
-    "bin": "./cli.js",
-    "main": "index.js",
-    "scripts": {
-      "start": "node index.js"
-    },
-    "dependencies": {
-    },
-    "devDependencies": {
-    }
-  }
+  "name": "okomari_pachho",
+  "description": "server",
+  "license": "MIT",
+  "version": "1.0.0",
+  "bin": "./cli.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
+}
