@@ -39,7 +39,8 @@ const app = new Vue({
                 },
                 body: JSON.stringify(data)
             })
-                .then(r => console.log(r))
+                .then(r => r.json())
+                .then(r => alert(r.status))
                 .catch(e => console.log(e))
         }
     }
