@@ -5,11 +5,6 @@ console.log('Server is online.');
 
 // GET method route
 app.get('/', function (req, res) {
-  console.log(`Get is sended`)
-  res.send(' Hi ');
-})
-
-app.get('/test', function (req, res) {
   const List = [
     {
       situation: '崩壊',
@@ -31,16 +26,18 @@ app.get('/test', function (req, res) {
     },
   ];
 
-  // JSONを送信する
+  // GET accion
   res.json(List);
 })
 
 // POST method route
-app.post('/test', function (req, res) {
+app.post('/', function (req, res) {
+  const List = { "status": "your message has been received" };
   console.log(`POST is sended`)
-  console.log(req.body);
-  console.log(req.body.name);
-  res.send('POST is sended.');
+  console.log(req.data);
+
+  // POST accion
+  res.json(List);
 })
 
 app.listen(port, () => {
