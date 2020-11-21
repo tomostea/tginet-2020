@@ -1,9 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 3000
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`)
-})
 console.log('Server is online.');
 
 // GET method route
@@ -14,10 +11,24 @@ app.get('/', function (req, res) {
 
 app.get('/test', function (req, res) {
   const List = [
-    { title: '状況', done: true },
-    { title: '場所', done: false },
-    { title: '画像id', done: false },
-    { title: 'コメント', done: false },
+    {
+      situation: '崩壊',
+      location: {
+        longitude: 34.1,
+        latitude: 10.2
+      },
+      imageid: 'abcd',
+      comment: '直して',
+    },
+    {
+      situation: '追加',
+      location: {
+        longitude: 34.2,
+        latitude: 10.3
+      },
+      imageid: '1234',
+      comment: '欲しい',
+    },
   ];
 
   // JSONを送信する
@@ -30,4 +41,8 @@ app.post('/test', function (req, res) {
   console.log(req.body);
   console.log(req.body.name);
   res.send('POST is sended.');
+})
+
+app.listen(port, () => {
+  console.log(`listening at http://localhost:${port}`)
 })
