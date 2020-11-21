@@ -32,6 +32,13 @@ const app = new Vue({
         this.$nextTick(function () {
             this.init_map();
         });
+        const url = "/"
+        fetch(url, {
+            method: 'GET'
+        })
+            .then(r => r.json())
+            .then(r => alert(r))
+            .catch(e => console.log(e))
     },
     methods: {
         init_map : function () {
