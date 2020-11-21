@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use('/static', express.static('public'))
+
 // GET method route
 app.get('/', function (req, res) {
   const List = [
@@ -33,7 +35,7 @@ app.get('/', function (req, res) {
 app.post('/', function (req, res) {
   const List = { "status": "your message has been received" };
   console.log(`POST is sended`)
-  console.log(req.data);
+  console.log(req.body);
 
   // POST accion
   res.json(List);
