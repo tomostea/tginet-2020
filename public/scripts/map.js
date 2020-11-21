@@ -3,19 +3,18 @@
 const app = new Vue({
     el: '#app',
     template: `
-    <div style="margin:10px">
-    
-    <div class="custom-control custom-radio">
-      <input type="checkbox" class="custom-control-input" id="custom-radio-1">
-      <label class="custom-control-label" for="custom-radio-1">選択肢1</label>
-    </div>
-    <div class="custom-control custom-radio">
-      <input type="checkbox" class="custom-control-input" id="custom-radio-2">
-      <label class="custom-control-label" for="custom-radio-2">選択肢2</label>
-    </div>
-    <div class="custom-control custom-radio">
-      <input type="checkbox" class="custom-control-input" id="custom-radio-3">
-      <label class="custom-control-label" for="custom-radio-3">選択肢3</label>
+    <div style="padding-left:10px">
+
+    <div class="radio-inline">
+    <label>
+        <input type="radio" name="gender" value="man" style="margin-left:10px">タイプ1
+    </label>
+    <label>
+        <input type="radio" name="gender" value="woman" style="margin-left:10px">タイプ2
+    </label>
+    <label>
+    <input type="radio" name="gender" value="woman" style="margin-left:10px">タイプ3
+</label>
     </div>
   
 
@@ -24,7 +23,9 @@ const app = new Vue({
     </div>
     `,
     data: {
-        map: '',
+        map: "",
+        reports: [],
+        pin_test: [],
     },
 
     mounted: function () {
@@ -43,10 +44,25 @@ const app = new Vue({
         init_map: function () {
             this.map = L.map('mapcontainer');
 
-            this.map.setView([35.40, 136], 5);
+            this.map.setView([35.655755 , 139.755465], 14);
             L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
                 attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
+                //attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>オープンストリートマップ</a>"
             }).addTo(this.map);
+            this.init_pin_test();
         },
+        init_pin_test : function(){
+            var pin = [[35.8627, 139.6072], 
+            [35.655755 , 139.755465],
+            [34.655755 , 139.755465],]
+
+            var count = 0;
+            for(var item of pin){
+                L.marker(item,{title:count,draggable:true}).addTo(this.map);
+                console.log(item);
+                count ++;
+            }
+            
+        }
     },
 })
