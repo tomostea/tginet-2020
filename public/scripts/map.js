@@ -27,15 +27,21 @@ const app = new Vue({
         reports: [],
         pin_test: [],
     },
-    
+
     mounted: function () {
-        console.log("created");
+        const url = "/"
+        fetch(url, {
+            method: 'GET'
+        })
+            .then(r => r.json())
+            .then(r => alert(JSON.stringify(r)))
+            .catch(e => console.log(e))
         this.$nextTick(function () {
             this.init_map();
         });
     },
     methods: {
-        init_map : function () {
+        init_map: function () {
             this.map = L.map('mapcontainer');
 
             this.map.setView([35.655755 , 139.755465], 14);
