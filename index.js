@@ -14,25 +14,19 @@ app.use('/static', express.static('public'))
 
 // GET method route
 app.get('/', function (req, res) {
-  const List = []
-
   const db = new sqlite.Database('opinion.sqlite');
-  db.serialize(() => {
-    db.each('SELECT * FROM opinion', (error, row) => {
-      if (error) {
-        console.error('Error!', error);
-        return;
-      }
-      console.log(row);
-      List.push(row);
-    }).then(() => {
-      // GET accion
-      res.json(List)
+  function getNewOrders() {
+    return new Promise((resolve, reject) => {
+      let orders = [];
+      db.all('SELECT * FROM opinion', function (err, rows) {
+        resolve(rows);
+      });
     })
-  });
-
-  db.close();
-  console.log(List)
+  }
+  getNewOrders().then(r => {
+    console.log(r)
+    res.json(r)
+  })
 })
 
 // POST method route
@@ -62,8 +56,8 @@ app.post('/', function (req, res) {
 
   // DBにいれるデータ
   const Type = req.body.type
-  const Longitude = 40.5
-  const Latitude = 140.5
+  const Longitude = req.body.longitude
+  const Latitude = req.body.latitude
   const Comment = req.body.comment
   const Imageid = hash
 
