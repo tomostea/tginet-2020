@@ -7,7 +7,7 @@ const app = new Vue({
 
     <div class="radio-inline">
     <label v-for="type in types">
-        <input type="radio" v-model="type" v-bind:value="type.name" style="margin-left:10px">{{ type.name }}
+        <input type="radio" v-model="checked" v-bind:value="type.name" style="margin-left:10px">{{ type.name }}
     </label>
     </div>
 
@@ -20,11 +20,11 @@ const app = new Vue({
         map: "",
         reports: [], //サーバーから受け取った報告すべて
         types: [
-            { id: 32, name: 'all' },
-            { id: 0, name: 'trouble' },
-            { id: 1, name: 'request' }
+            {name: 'all'},
+            {name: 'trouble' },
+            {name: 'request' }
         ],
-        type: {id: 32, name: 'all'},
+        checked: 'all',
     },
 
     mounted: function () {
@@ -67,11 +67,10 @@ const app = new Vue({
             console.log(this.type);
             for(var report of this.reports){
                 //console.log(report);
-                var position = [report.location.longitude, report.location.latitude];
-                var report_name = report.situation;
-                var type_name = report.types.id;
+                var position = [report.longitude, report.latitude];
+                var type_name = report.checked;
                 //if(type_name == 'all' || this.type.name == type_name){
-                    L.marker(position,{title:report_name,draggable:false}).addTo(this.map);
+                    L.marker(position,{title:type_name,draggable:false}).addTo(this.map);
                 //}
             }
         },
@@ -92,31 +91,20 @@ const app = new Vue({
         generate_reports_example: function(){
             const List = [
                 {
-                    types: {
-                        id: 0, name: 'trouble' ,
-                    },    
-                    
-                    situation: '崩壊',
-                    location: {
-                        longitude: 35.8627,
-                        latitude: 139.6072
-                    },
-                    imageid: 'abcd',
-                    comment: '直して',
+                  type: 'trouble',
+                  longitude: 34.1,
+                  latitude: 10.2,
+                  imageid: 'abcd',
+                  comment: '直して',
                 },
                 {
-                    types: {
-                        id: 1, name: 'request' 
-                    },
-                    situation: '追加',
-                    location: {
-                        longitude: 35.6,
-                        latitude: 139.6072
-                    },
-                    imageid: '1234',
-                    comment: '欲しい',
+                  type: 'request',
+                  longitude: 34.2,
+                  latitude: 10.3,
+                  imageid: '1234',
+                  comment: '欲しい',
                 },
-            ];
+              ];
             return List;
         },
 
