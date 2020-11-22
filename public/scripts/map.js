@@ -7,7 +7,7 @@ const app = new Vue({
 
     <div class="radio-inline">
     <label v-for="type in types">
-        <input type="radio" v-model="checked" v-bind:value="type.name" v-on:click="reset_map" style="margin-left:10px">{{ type.name }}
+        <input type="radio" v-model="checked" v-bind:value="type.name" v-on:click="on_chose_type" style="margin-left:10px">{{ type.name }}
     </label>
     </div>
 
@@ -25,7 +25,7 @@ const app = new Vue({
             {name: 'request' }
         ],
         checked: 'all',
-
+        prev_checked: 'all',
         layers: {},
     },
 
@@ -40,11 +40,14 @@ const app = new Vue({
 
 
         this.$nextTick(function () {
+            //サーバーからの値の読み込み
             this.reports = this.generate_reports_example();
             
+            //レイヤーグループの初期化
             for(var type of this.types){
                 this.layers[type.name] = L.layerGroup();
             }
+            //地図の初期化
             this.init_map();
         });
     },
@@ -58,8 +61,9 @@ const app = new Vue({
                 //attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>オープンストリートマップ</a>"
             }).addTo(this.map);
 
+            //レイヤーグループにピンを足す
             this.add_pin();
-            //this.add_pin_test();
+            this.map.addLayer(this.layers['all']); 
         },
 
         reset_map: function(){
@@ -68,26 +72,33 @@ const app = new Vue({
             this.init_map();
         },
 
-        chose_pin(){
-
+        on_chose_type: function(){
+            const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+            (async () => {
+                await sleep(100);
+                this.map.removeLayer(this.layers[this.prev_checked]);
+                this.map.addLayer(this.layers[this.checked]); 
+                this.prev_checked = this.checked;
+            })();
         },
         
         //resultsの中身からmapにピンを生成する
         add_pin: function(){
-            console.log(this.type);
-            console.log(this.reports);
             for(var report of this.reports){
                 //console.log(report);
                 var position = [report.longitude, report.latitude];
-                var type_name = report.checked;
+                var type_name = report.type;
+                console.log(type_name);
                 //if(type_name == 'all' || this.type.name == type_name){
-                    L.marker(position,{title:type_name,draggable:false}).addTo(this.map);
                      //ポップアップする文字（HTML可、ここでは画像を表示）
                     var sucontents = "埼玉大学です<br><img src='su.jpg' width='500' height='375'>"
                     //ポップアップオブジェクトを作成
-                    var popup = L.popup().setContent("桜区役所です");
+                    var popup = L.popup().setContent(report.comment);
                     //マーカーにポップアップを紐付けする。同時にbindTooltipでツールチップも追加
-                    L.marker(position).bindPopup(popup2).addTo(this.map);
+                    //L.marker(position).bindPopup(popup).addTo(this.map);
+                    var marker = L.marker(position).bindPopup(popup);
+                    this.layers[type_name].addLayer(marker);
+                    this.layers['all'].addLayer(marker);
                 //}
             }
         },
@@ -111,15 +122,15 @@ const app = new Vue({
             const List = [
                 {
                   type: 'trouble',
-                  longitude: 34.1,
-                  latitude: 10.2,
+                  longitude: 35.8627,
+                  latitude: 139.6072,
                   imageid: 'abcd',
                   comment: '直して',
                 },
                 {
                   type: 'request',
-                  longitude: 34.2,
-                  latitude: 10.3,
+                  longitude: 35.655755,
+                  latitude: 139.755465,
                   imageid: '1234',
                   comment: '欲しい',
                 },
