@@ -61,7 +61,10 @@ const app = new Vue({
                 body: JSON.stringify(data)
             })
                 .then(r => r.json())
-                .then(r => alert(r.status))
+                .then(r => {
+                    alert("登録されました！結果を表示します (マップに移ります)")
+                    window.open('/static/map.html')
+                })
                 .catch(e => console.log(e))
         },
         getLocation: function () {
