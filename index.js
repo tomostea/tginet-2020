@@ -43,8 +43,9 @@ app.post('/', function (req, res) {
   // デコード
   var encodedData = req.body.image;
   const fileData = encodedData.replace(/^data:\w+\/\w+;base64,/, '')
-  console.log(fileData);
   var decode = new Buffer.from(fileData, 'base64').toString('binary');
+  const fileExtension = encodedData.toString().slice(encodedData.indexOf('/') + 1, encodedData.indexOf(';'))
+  console.log(fileExtension);
 
   // デコードされたものをhash化
   var sha512 = crypto.createHash('sha512');
@@ -53,7 +54,7 @@ app.post('/', function (req, res) {
   console.log(hash);
 
   // ハッシュ値.pngの形で保存
-  fs.writeFile(`public/images/${hash}.png`, decode, function (err) {
+  fs.writeFile(`public/images/${hash}.${fileExtension}`, decode, function (err) {
     console.log(err);
   });
 
