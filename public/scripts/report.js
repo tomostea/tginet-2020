@@ -21,7 +21,7 @@ const app = new Vue({
         ],
         response: "",
         checked: "",
-        btId: "1234567890abcd",
+        btName: "BT01",
         comment: ""
     },
     methods: {
@@ -29,7 +29,7 @@ const app = new Vue({
             const url = "/"
             const data = {
                 type: this.checked,
-                btId: this.btId,
+                btName: this.btName,
                 comment: this.comment
             }
             fetch(url, {

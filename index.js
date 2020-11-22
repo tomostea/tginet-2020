@@ -13,20 +13,16 @@ app.use('/static', express.static('public'))
 app.get('/', function (req, res) {
   const List = [
     {
-      situation: '崩壊',
-      location: {
-        longitude: 34.1,
-        latitude: 10.2
-      },
+      type: 'trouble',
+      longitude: 34.1,
+      latitude: 10.2,
       imageid: 'abcd',
       comment: '直して',
     },
     {
-      situation: '追加',
-      location: {
-        longitude: 34.2,
-        latitude: 10.3
-      },
+      type: 'request',
+      longitude: 34.2,
+      latitude: 10.3,
       imageid: '1234',
       comment: '欲しい',
     },
