@@ -7,7 +7,7 @@ const app = new Vue({
 
     <div class="radio-inline">
     <label v-for="type in types">
-        <input type="radio" v-model="checked" v-bind:value="type.name" style="margin-left:10px">{{ type.name }}
+        <input type="radio" v-model="checked" v-bind:value="type.name" v-on:click="reset_map" style="margin-left:10px">{{ type.name }}
     </label>
     </div>
 
@@ -25,6 +25,8 @@ const app = new Vue({
             {name: 'request' }
         ],
         checked: 'all',
+
+        layers: {},
     },
 
     mounted: function () {
@@ -39,6 +41,10 @@ const app = new Vue({
 
         this.$nextTick(function () {
             this.reports = this.generate_reports_example();
+            
+            for(var type of this.types){
+                this.layers[type.name] = L.layerGroup();
+            }
             this.init_map();
         });
     },
@@ -61,10 +67,15 @@ const app = new Vue({
             this.map = null;
             this.init_map();
         },
+
+        chose_pin(){
+
+        },
         
         //resultsの中身からmapにピンを生成する
         add_pin: function(){
             console.log(this.type);
+            console.log(this.reports);
             for(var report of this.reports){
                 //console.log(report);
                 var position = [report.longitude, report.latitude];
