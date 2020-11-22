@@ -101,7 +101,8 @@ const app = new Vue({
                 var popup = L.popup().setContent(report.comment);
                 //imege version
                 //ポップアップする文字（HTML可、ここでは画像を表示）
-                var sucontents = `${report.comment}<br><img src='/static/images/46827f22bfbb162e5f9a6b7dbdaad990d9671d9ea8406a4f7ae72fb32c1e3ff69c3740816fac00d8ff3fc68789ddb3085cbb7a2b77a5b47812db4971be5c43c4.png' width='300' height='275'>`
+                //var sucontents = `${report.comment}<br><img src='/static/images/46827f22bfbb162e5f9a6b7dbdaad990d9671d9ea8406a4f7ae72fb32c1e3ff69c3740816fac00d8ff3fc68789ddb3085cbb7a2b77a5b47812db4971be5c43c4.png' width='300' height='275'>`
+                var sucontents = `${report.comment}<br><img src='/static/images/${report.imageid}.png' width='300' height='275'>`
                 var popupimg = L.popup({ maxWidth: 550 }).setContent(sucontents);
                 var marker = L.marker(position, { draggable: true }).bindPopup(popupimg);
                 //no image version
