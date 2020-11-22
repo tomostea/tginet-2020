@@ -76,7 +76,7 @@ const app = new Vue({
                     //ポップアップオブジェクトを作成
                     var popup = L.popup().setContent("桜区役所です");
                     //マーカーにポップアップを紐付けする。同時にbindTooltipでツールチップも追加
-                    L.marker(position).bindPopup(popup2).addTo(this.map);
+                    L.marker(position).bindPopup(popup).addTo(this.map);
                 //}
             }
         },
