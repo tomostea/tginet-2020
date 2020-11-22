@@ -1,2 +1,2 @@
 # tginet_server
-Server
+OkomariPaccho the system helps people send requests and also goverment gets to know them
