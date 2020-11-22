@@ -2,7 +2,7 @@ const app = new Vue({
     el: '#app',
     template: `
     <div>
-    <button v-on:click="getLocation">お困りスポットを取得する</button>
+    <button v-on:click="getLocation">{locationFlag}</button>
     タイプ
     <ul>
         <li v-for="type in types">
@@ -27,6 +27,7 @@ const app = new Vue({
         longitude: 0,
         latitude: 0,
         image: "",
+        locationFlag: "お困りスポットを取得する",
         comment: ""
     },
     methods: {
@@ -70,6 +71,7 @@ const app = new Vue({
         getLocation: function () {
             navigator.geolocation.getCurrentPosition(
                 r => {
+                    this.locationFlag = "取得しました！"
                     this.longitude = Math.round(r.coords.longitude*1000)/1000
                     this.latitude = Math.round(r.coords.latitude*1000)/1000
                 },
