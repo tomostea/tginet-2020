@@ -71,6 +71,12 @@ const app = new Vue({
                 var type_name = report.checked;
                 //if(type_name == 'all' || this.type.name == type_name){
                     L.marker(position,{title:type_name,draggable:false}).addTo(this.map);
+                     //ポップアップする文字（HTML可、ここでは画像を表示）
+                    var sucontents = "埼玉大学です<br><img src='su.jpg' width='500' height='375'>"
+                    //ポップアップオブジェクトを作成
+                    var popup = L.popup().setContent("桜区役所です");
+                    //マーカーにポップアップを紐付けする。同時にbindTooltipでツールチップも追加
+                    L.marker(position).bindPopup(popup).addTo(this.map);
                 //}
             }
         },
@@ -85,6 +91,8 @@ const app = new Vue({
                 L.marker(item,{title:count,draggable:false}).addTo(this.map);
                 console.log(item);
                 count ++;
+
+
             }
         },
 
