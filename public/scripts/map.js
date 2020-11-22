@@ -42,6 +42,10 @@ const app = new Vue({
                     console.log(r);
                     console.log(this.reports);
  
+                    //レイヤーグループの初期化
+                    for(var type of this.types){
+                        this.layers[type.name] = L.layerGroup();
+                    }
                     //地図の初期化
                     this.init_map();
                 });
@@ -49,10 +53,7 @@ const app = new Vue({
             .catch(e => console.log(e))
 
         
-        //レイヤーグループの初期化
-        for(var type of this.types){
-            this.layers[type.name] = L.layerGroup();
-        }
+
 
     },
     methods: {
@@ -65,9 +66,12 @@ const app = new Vue({
                 //attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>オープンストリートマップ</a>"
             }).addTo(this.map);
 
+            console.log("111");
             //レイヤーグループにピンを足す
             this.add_pin();
+            console.log("222");
             this.map.addLayer(this.layers['all']); 
+            console.log("333");
         },
 
         reset_map: function(){
@@ -89,7 +93,7 @@ const app = new Vue({
         //resultsの中身からmapにピンを生成する
         add_pin: function(){
             for(var report of this.reports){
-                //console.log(report);
+                console.log(report);
                 var position = [report.longitude, report.latitude];
                 var type_name = report.type;
                 //console.log(type_name);
@@ -97,7 +101,7 @@ const app = new Vue({
                 var popup = L.popup().setContent(report.comment);
                 //imege version
                 //ポップアップする文字（HTML可、ここでは画像を表示）
-                var sucontents = `${report.comment}<br><img src='/static/images/46827f22bfbb162e5f9a6b7dbdaad990d9671d9ea8406a4f7ae72fb32c1e3ff69c3740816fac00d8ff3fc68789ddb3085cbb7a2b77a5b47812db4971be5c43c4.png' width='500' height='375'>`
+                var sucontents = `${report.comment}<br><img src='/static/images/46827f22bfbb162e5f9a6b7dbdaad990d9671d9ea8406a4f7ae72fb32c1e3ff69c3740816fac00d8ff3fc68789ddb3085cbb7a2b77a5b47812db4971be5c43c4.png' width='300' height='275'>`
                 var popupimg = L.popup({ maxWidth: 550 }).setContent(sucontents);
                 var marker = L.marker(position, { draggable: true }).bindPopup(popupimg);
                 //no image version

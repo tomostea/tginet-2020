@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
       longitude: 34.2,
       latitude: 10.3,
       imageid: '1234',
-      comment: 'ほしい',
+      comment: 'あああああ',
     },
   ];
 
