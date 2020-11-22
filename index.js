@@ -43,7 +43,9 @@ app.post('/', function (req, res) {
   // デコード
   var encodedData = req.body.image;
   const fileData = encodedData.replace(/^data:\w+\/\w+;base64,/, '')
-  var decode = new Buffer.from(fileData, 'base64').toString('binary');
+  var decode = new Buffer.from(fileData, 'base64');
+
+  // 拡張子
   const fileExtension = encodedData.toString().slice(encodedData.indexOf('/') + 1, encodedData.indexOf(';'))
   console.log(fileExtension);
 
@@ -59,13 +61,6 @@ app.post('/', function (req, res) {
   });
 
   // POST accion
-  /*  
-  const data = {
-    type: this.checked,
-    btName: this.btName,
-    comment: this.comment
-  }
-  */
   res.json(List);
 })
 
