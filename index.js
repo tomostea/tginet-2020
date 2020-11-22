@@ -41,7 +41,10 @@ app.post('/', function (req, res) {
   console.log(req.body);
 
   // デコード
-  var decode = new Buffer.from(req.body.image, 'base64').toString('binary');;
+  var encodedData = req.body.image;
+  const fileData = encodedData.replace(/^data:\w+\/\w+;base64,/, '')
+  console.log(fileData);
+  var decode = new Buffer.from(fileData, 'base64').toString('binary');
 
   // デコードされたものをhash化
   var sha512 = crypto.createHash('sha512');
