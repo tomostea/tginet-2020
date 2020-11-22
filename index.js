@@ -39,16 +39,19 @@ app.post('/', function (req, res) {
   const List = { "status": "your message has been received" };
   console.log(`POST is sended`)
   console.log(req.body);
+
+  // デコード
+  var decode = new Buffer.from(req.body.image, 'base64').toString('binary');;
+
+  // デコードされたものをhash化
   var sha512 = crypto.createHash('sha512');
-  sha512.update(req.body.comment)
+  sha512.update(decode)
   var hash = sha512.digest('hex')
   console.log(hash);
 
-  fs.readFile('encoded.png', 'utf8', function (err, data) {
-    var decode = new Buffer(data, 'base64');
-    fs.writeFile('xxx.png', decode, function (err) {
-      console.log(err);
-    });
+  // ハッシュ値.pngの形で保存
+  fs.writeFile(`public/images/${hash}.png`, decode, function (err) {
+    console.log(err);
   });
 
   // POST accion
