@@ -2,6 +2,7 @@ const app = new Vue({
     el: '#app',
     template: `
     <div>
+    <button v-on:click="findBleDevices">お困りスポットを取得する</button>
     タイプ
     <ul>
         <li v-for="type in types">
@@ -60,6 +61,16 @@ const app = new Vue({
                 .then(r => r.json())
                 .then(r => alert(r.status))
                 .catch(e => console.log(e))
+        },
+        findBleDevices: function() {
+            if (navigator.bluetooth) {
+                navigator.bluetooth.requestDevice({ acceptAllDevices: true })
+                    .then(device => device.name)
+                    .then(id => this.btName = id)
+                    .catch(err => console.log(err))
+            } else {
+                alert("bluetoothを使用できません!")
+            }
         }
     }
 })
