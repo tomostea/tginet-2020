@@ -2,7 +2,7 @@ const app = new Vue({
     el: '#app',
     template: `
     <div>
-    <button v-on:click="getLocation">{locationFlag}</button>
+    <button v-on:click="getLocation">{{locationFlag}}</button>
     タイプ
     <ul>
         <li v-for="type in types">
