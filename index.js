@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
+const sqlite = require('sqlite3').verbose();
 var fs = require('fs');
 const port = 3000
 
@@ -13,25 +14,25 @@ app.use('/static', express.static('public'))
 
 // GET method route
 app.get('/', function (req, res) {
-  const List = [
-    {
-      type: 'trouble',
-      longitude: 34.1,
-      latitude: 10.2,
-      imageid: 'abcd',
-      comment: '直して',
-    },
-    {
-      type: 'request',
-      longitude: 34.2,
-      latitude: 10.3,
-      imageid: '1234',
-      comment: 'あああああ',
-    },
-  ];
+  const List = []
 
-  // GET accion
-  res.json(List);
+  const db = new sqlite.Database('opinion.sqlite');
+  db.serialize(() => {
+    db.each('SELECT * FROM opinion', (error, row) => {
+      if (error) {
+        console.error('Error!', error);
+        return;
+      }
+      console.log(row);
+      List.push(row);
+    }).then(() => {
+      // GET accion
+      res.json(List)
+    })
+  });
+
+  db.close();
+  console.log(List)
 })
 
 // POST method route
@@ -47,7 +48,6 @@ app.post('/', function (req, res) {
 
   // 拡張子
   const fileExtension = encodedData.toString().slice(encodedData.indexOf('/') + 1, encodedData.indexOf(';'))
-  console.log(fileExtension);
 
   // デコードされたものをhash化
   var sha512 = crypto.createHash('sha512');
@@ -59,6 +59,28 @@ app.post('/', function (req, res) {
   fs.writeFile(`public/images/${hash}.${fileExtension}`, decode, function (err) {
     console.log(err);
   });
+
+  // DBにいれるデータ
+  const Type = req.body.type
+  const Longitude = 40.5
+  const Latitude = 140.5
+  const Comment = req.body.comment
+  const Imageid = hash
+
+  const db = new sqlite.Database('opinion.sqlite');
+  // SQL を同期的に実行する
+  db.serialize(() => {
+    // テーブルがなければ作成する
+    db.run('CREATE TABLE IF NOT EXISTS opinion (type TEXT, longitude REAL, latitude REAL, comment TEXT, imageid TEXT)');
+
+    // Prepared Statement でデータを挿入する
+    const stmt = db.prepare('INSERT INTO opinion VALUES (?, ?, ?, ?, ?)');
+    stmt.run([Type, Longitude, Latitude, Comment, Imageid]);
+
+    // prepare() で取得した Prepared Statement オブジェクトをクローズする。これをコールしないとエラーになる
+    stmt.finalize();
+  });
+  db.close();
 
   // POST accion
   res.json(List);
