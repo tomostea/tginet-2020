@@ -35,21 +35,25 @@ const app = new Vue({
             method: 'GET'
         })
             .then(r => r.json())
-            .then(r => alert(JSON.stringify(r)))
+            .then(r => {this.reports = r;
+                this.$nextTick(function () {
+                    //サーバーからの値の読み込み
+                    //this.reports = this.generate_reports_example();
+                    console.log(r);
+                    console.log(this.reports);
+ 
+                    //地図の初期化
+                    this.init_map();
+                });
+            })
             .catch(e => console.log(e))
 
+        
+        //レイヤーグループの初期化
+        for(var type of this.types){
+            this.layers[type.name] = L.layerGroup();
+        }
 
-        this.$nextTick(function () {
-            //サーバーからの値の読み込み
-            this.reports = this.generate_reports_example();
-            
-            //レイヤーグループの初期化
-            for(var type of this.types){
-                this.layers[type.name] = L.layerGroup();
-            }
-            //地図の初期化
-            this.init_map();
-        });
     },
     methods: {
         init_map: function () {
@@ -88,18 +92,19 @@ const app = new Vue({
                 //console.log(report);
                 var position = [report.longitude, report.latitude];
                 var type_name = report.type;
-                console.log(type_name);
-                //if(type_name == 'all' || this.type.name == type_name){
-                     //ポップアップする文字（HTML可、ここでは画像を表示）
-                    var sucontents = "埼玉大学です<br><img src='su.jpg' width='500' height='375'>"
-                    //ポップアップオブジェクトを作成
-                    var popup = L.popup().setContent(report.comment);
-                    //マーカーにポップアップを紐付けする。同時にbindTooltipでツールチップも追加
-                    //L.marker(position).bindPopup(popup).addTo(this.map);
-                    var marker = L.marker(position).bindPopup(popup);
-                    this.layers[type_name].addLayer(marker);
-                    this.layers['all'].addLayer(marker);
-                //}
+                //console.log(type_name);
+                
+                var popup = L.popup().setContent(report.comment);
+                //imege version
+                //ポップアップする文字（HTML可、ここでは画像を表示）
+                var sucontents = `${report.comment}<br><img src='/static/images/46827f22bfbb162e5f9a6b7dbdaad990d9671d9ea8406a4f7ae72fb32c1e3ff69c3740816fac00d8ff3fc68789ddb3085cbb7a2b77a5b47812db4971be5c43c4.png' width='500' height='375'>`
+                var popupimg = L.popup({ maxWidth: 550 }).setContent(sucontents);
+                var marker = L.marker(position, { draggable: true }).bindPopup(popupimg);
+                //no image version
+                //var marker = L.marker(position).bindPopup(popup).addTo(this.map);
+                
+                this.layers[type_name].addLayer(marker);
+                this.layers['all'].addLayer(marker);
             }
         },
 
